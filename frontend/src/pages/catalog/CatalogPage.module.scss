@@ -4,6 +4,7 @@
 
   h1 {
     margin-bottom: $spacing-xl;
+    color: var(--color-text-primary);
   }
 }
 
@@ -15,26 +16,33 @@
   input {
     flex: 1;
     padding: $spacing-md;
-    border: 1px solid $border-color;
+    border: 1px solid var(--color-border);
     border-radius: $border-radius-md;
     font-size: $font-size-base;
+    background: var(--color-background);
+    color: var(--color-text-primary);
+    // Оставляем быстрый transition для :focus
+    transition: border-color 0.2s ease;
 
     &:focus {
       outline: none;
-      border-color: $primary-color;
+      border-color: var(--color-primary);
     }
   }
 
   button {
     padding: $spacing-md $spacing-xl;
-    background: $primary-color;
+    background: var(--color-primary);
     color: white;
     border: none;
     border-radius: $border-radius-md;
     font-weight: 600;
+    cursor: pointer;
+    // Оставляем быстрый transition для hover
+    transition: background-color 0.2s ease;
 
     &:hover {
-      background: $primary-hover;
+      background: var(--color-primary-hover);
     }
   }
 }
@@ -46,22 +54,23 @@
 }
 
 .productCard {
-  background: white;
-  border: 1px solid $border-color;
+  background: var(--color-background);
+  border: 1px solid var(--color-border);
   border-radius: $border-radius-lg;
   overflow: hidden;
-  transition: transform 0.2s, box-shadow 0.2s;
+  // Оставляем transform - не покрыт глобальным transition
+  transition: transform 0.2s ease;
 
   &:hover {
     transform: translateY(-4px);
-    box-shadow: $shadow-md;
+    box-shadow: var(--shadow-md);
   }
 }
 
 .imageWrapper {
   width: 100%;
   height: 200px;
-  background: $background-secondary;
+  background: var(--color-background-secondary);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -74,7 +83,7 @@
 }
 
 .noImage {
-  color: $text-secondary;
+  color: var(--color-text-secondary);
 }
 
 .info {
@@ -83,18 +92,18 @@
   h3 {
     font-size: $font-size-lg;
     margin-bottom: $spacing-sm;
-    color: $text-primary;
+    color: var(--color-text-primary);
   }
 }
 
 .price {
   font-size: $font-size-xl;
   font-weight: 700;
-  color: $primary-color;
+  color: var(--color-primary);
   margin-bottom: $spacing-sm;
 }
 
 .seller {
   font-size: $font-size-sm;
-  color: $text-secondary;
+  color: var(--color-text-secondary);
 }

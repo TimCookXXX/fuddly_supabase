@@ -1,0 +1,71 @@
+// Светлая тема (по умолчанию)
+:root {
+  // Colors
+  --color-primary: #2563eb;
+  --color-primary-hover: #1d4ed8;
+  --color-secondary: #10b981;
+  --color-danger: #ef4444;
+  --color-warning: #f59e0b;
+
+  // Text colors
+  --color-text-primary: #1f2937;
+  --color-text-secondary: #6b7280;
+
+  // Backgrounds
+  --color-background: #ffffff;
+  --color-background-secondary: #f9fafb;
+
+  // Borders
+  --color-border: #e5e7eb;
+
+  // Shadows
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+// Темная тема
+[data-theme='dark'] {
+  // Colors (brand colors slightly adjusted for dark mode)
+  --color-primary: #3b82f6;
+  --color-primary-hover: #60a5fa;
+  --color-secondary: #10b981;
+  --color-danger: #ef4444;
+  --color-warning: #f59e0b;
+
+  // Text colors (inverted)
+  --color-text-primary: #f9fafb;
+  --color-text-secondary: #d1d5db;
+
+  // Backgrounds (dark)
+  --color-background: #111827;
+  --color-background-secondary: #1f2937;
+
+  // Borders
+  --color-border: #374151;
+
+  // Enhanced shadows for dark mode
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
+}
+
+// Автоопределение системной темы
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']):not([data-theme]) {
+    // Apply dark theme variables when no explicit theme is set
+    --color-primary: #3b82f6;
+    --color-primary-hover: #60a5fa;
+    --color-secondary: #10b981;
+    --color-danger: #ef4444;
+    --color-warning: #f59e0b;
+    --color-text-primary: #f9fafb;
+    --color-text-secondary: #d1d5db;
+    --color-background: #111827;
+    --color-background-secondary: #1f2937;
+    --color-border: #374151;
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
+  }
+}

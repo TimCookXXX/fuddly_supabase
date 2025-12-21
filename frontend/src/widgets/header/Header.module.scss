@@ -1,10 +1,11 @@
 .header {
-  background: $background;
-  border-bottom: 1px solid $border-color;
+  background: var(--color-background);
+  border-bottom: 1px solid var(--color-border);
   padding: $spacing-md 0;
   position: sticky;
   top: 0;
   z-index: 100;
+  // transition уже применён глобально через * в global.scss
 }
 
 .content {
@@ -16,11 +17,13 @@
 .logo {
   font-size: $font-size-2xl;
   font-weight: 700;
-  color: $primary-color;
+  color: var(--color-primary);
   text-decoration: none;
+  // Оставляем более быстрый transition для hover-эффекта
+  transition: color 0.2s ease;
 
   &:hover {
-    color: $primary-hover;
+    color: var(--color-primary-hover);
   }
 }
 
@@ -31,11 +34,11 @@
 
   a {
     font-size: $font-size-base;
-    color: $text-primary;
-    transition: color 0.2s;
+    color: var(--color-text-primary);
+    transition: color 0.2s ease;
 
     &:hover {
-      color: $primary-color;
+      color: var(--color-primary);
     }
   }
 }
@@ -43,12 +46,13 @@
 .logoutBtn {
   background: none;
   border: none;
-  color: $text-primary;
+  color: var(--color-text-primary);
   font-size: $font-size-base;
   padding: 0;
-  transition: color 0.2s;
+  cursor: pointer;
+  transition: color 0.2s ease;
 
   &:hover {
-    color: $danger-color;
+    color: var(--color-danger);
   }
 }

@@ -4,21 +4,21 @@
   align-items: center;
   justify-content: center;
   padding: $spacing-xl 0;
-  background: $background-secondary;
+  background: var(--color-background-secondary);
 }
 
 .authCard {
-  background: white;
+  background: var(--color-background);
   padding: $spacing-xl * 2;
   border-radius: $border-radius-lg;
-  box-shadow: $shadow-lg;
+  box-shadow: var(--shadow-lg);
   width: 100%;
   max-width: 450px;
 
   h1 {
     margin-bottom: $spacing-xl;
     text-align: center;
-    color: $primary-color;
+    color: var(--color-primary);
   }
 }
 
@@ -29,26 +29,30 @@
     display: block;
     margin-bottom: $spacing-sm;
     font-weight: 500;
-    color: $text-primary;
+    color: var(--color-text-primary);
   }
 
   input {
     width: 100%;
     padding: $spacing-md;
-    border: 1px solid $border-color;
+    border: 1px solid var(--color-border);
     border-radius: $border-radius-md;
     font-size: $font-size-base;
+    background: var(--color-background);
+    color: var(--color-text-primary);
+    // Оставляем более быстрый transition для :focus эффекта
+    transition: border-color 0.2s ease;
 
     &:focus {
       outline: none;
-      border-color: $primary-color;
+      border-color: var(--color-primary);
     }
   }
 }
 
 .error {
-  background: rgba($danger-color, 0.1);
-  color: $danger-color;
+  background: rgba(239, 68, 68, 0.1);
+  color: var(--color-danger);
   padding: $spacing-md;
   border-radius: $border-radius-md;
   margin-bottom: $spacing-lg;
@@ -58,16 +62,19 @@
 button[type='submit'] {
   width: 100%;
   padding: $spacing-md;
-  background: $primary-color;
+  background: var(--color-primary);
   color: white;
   border: none;
   border-radius: $border-radius-md;
   font-size: $font-size-base;
   font-weight: 600;
   margin-top: $spacing-md;
+  cursor: pointer;
+  // Оставляем быстрый transition для hover
+  transition: background-color 0.2s ease;
 
   &:hover:not(:disabled) {
-    background: $primary-hover;
+    background: var(--color-primary-hover);
   }
 
   &:disabled {
@@ -79,10 +86,15 @@ button[type='submit'] {
 .link {
   text-align: center;
   margin-top: $spacing-lg;
-  color: $text-secondary;
+  color: var(--color-text-secondary);
 
   a {
-    color: $primary-color;
+    color: var(--color-primary);
     font-weight: 500;
+    transition: color 0.2s ease;
+
+    &:hover {
+      color: var(--color-primary-hover);
+    }
   }
 }

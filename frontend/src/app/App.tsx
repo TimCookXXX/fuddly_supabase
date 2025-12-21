@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from './store/hooks';
 import { getMe } from './store/slices/authSlice';
+import { useTheme } from '@/shared/hooks/useTheme';
 
 // Pages
 import HomePage from '@/pages/home/HomePage';
@@ -18,6 +19,9 @@ import Footer from '@/widgets/footer/Footer';
 function App() {
   const dispatch = useAppDispatch();
   const { isAuthenticated, token } = useAppSelector((state) => state.auth);
+
+  // Инициализация темы
+  useTheme();
 
   // Автоматическая загрузка пользователя при наличии токена
   useEffect(() => {

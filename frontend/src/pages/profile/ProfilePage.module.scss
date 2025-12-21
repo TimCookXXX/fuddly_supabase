@@ -7,27 +7,29 @@
 
   h1 {
     font-size: $font-size-3xl;
+    color: var(--color-text-primary);
   }
 }
 
 .userInfo {
-  background: white;
+  background: var(--color-background);
   padding: $spacing-xl;
   border-radius: $border-radius-lg;
-  box-shadow: $shadow-sm;
+  box-shadow: var(--shadow-sm);
   margin-bottom: $spacing-xl;
 
   h2 {
     margin-bottom: $spacing-md;
     font-size: $font-size-2xl;
+    color: var(--color-text-primary);
   }
 
   p {
     margin-bottom: $spacing-sm;
-    color: $text-secondary;
+    color: var(--color-text-secondary);
 
     strong {
-      color: $text-primary;
+      color: var(--color-text-primary);
     }
   }
 }
@@ -38,6 +40,7 @@
   h2 {
     margin-bottom: $spacing-lg;
     font-size: $font-size-xl;
+    color: var(--color-text-primary);
   }
 }
 
@@ -50,22 +53,25 @@
 
 .createBtn {
   padding: $spacing-md $spacing-lg;
-  background: $primary-color;
+  background: var(--color-primary);
   color: white;
   border: none;
   border-radius: $border-radius-md;
   font-weight: 600;
+  cursor: pointer;
+  // Оставляем быстрый transition для hover
+  transition: background-color 0.2s ease;
 
   &:hover {
-    background: $primary-hover;
+    background: var(--color-primary-hover);
   }
 }
 
 .productForm {
-  background: white;
+  background: var(--color-background);
   padding: $spacing-xl;
   border-radius: $border-radius-lg;
-  box-shadow: $shadow-sm;
+  box-shadow: var(--shadow-sm);
   margin-bottom: $spacing-xl;
 
   .formGroup {
@@ -75,6 +81,7 @@
       display: block;
       margin-bottom: $spacing-sm;
       font-weight: 500;
+      color: var(--color-text-primary);
     }
 
     input,
@@ -82,13 +89,17 @@
     select {
       width: 100%;
       padding: $spacing-md;
-      border: 1px solid $border-color;
+      border: 1px solid var(--color-border);
       border-radius: $border-radius-md;
       font-size: $font-size-base;
+      background: var(--color-background);
+      color: var(--color-text-primary);
+      // Оставляем быстрый transition для :focus
+      transition: border-color 0.2s ease;
 
       &:focus {
         outline: none;
-        border-color: $primary-color;
+        border-color: var(--color-primary);
       }
     }
 
@@ -101,15 +112,18 @@
 .submitBtn {
   width: 100%;
   padding: $spacing-md;
-  background: $secondary-color;
+  background: var(--color-secondary);
   color: white;
   border: none;
   border-radius: $border-radius-md;
   font-size: $font-size-base;
   font-weight: 600;
+  cursor: pointer;
+  // Оставляем transition для hover
+  transition: opacity 0.2s ease;
 
   &:hover:not(:disabled) {
-    background: darken($secondary-color, 10%);
+    opacity: 0.9;
   }
 
   &:disabled {
@@ -125,24 +139,25 @@
 }
 
 .productCard {
-  background: white;
+  background: var(--color-background);
   padding: $spacing-lg;
-  border: 1px solid $border-color;
+  border: 1px solid var(--color-border);
   border-radius: $border-radius-md;
 
   h3 {
     margin-bottom: $spacing-sm;
     font-size: $font-size-lg;
+    color: var(--color-text-primary);
   }
 }
 
 .price {
-  color: $primary-color;
+  color: var(--color-primary);
   font-weight: 700;
   margin-bottom: $spacing-sm;
 }
 
 .status {
   font-size: $font-size-sm;
-  color: $text-secondary;
+  color: var(--color-text-secondary);
 }
