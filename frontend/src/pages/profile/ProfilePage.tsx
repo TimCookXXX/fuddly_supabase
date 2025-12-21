@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '@/app/store/hooks';
 import { fetchMyProducts } from '@/app/store/slices/productsSlice';
 import { productsApi } from '@/shared/api/products';
+import Loader from '@/shared/components/Loader';
+import ButtonLoader from '@/shared/components/ButtonLoader';
 import styles from './ProfilePage.module.scss';
 
 const ProfilePage = () => {
@@ -49,7 +51,7 @@ const ProfilePage = () => {
         </div>
 
         {!user ? (
-          <div className={styles.loading}>Загрузка данных...</div>
+          <Loader text="Загрузка профиля..." />
         ) : (
           <div className={styles.userInfo}>
             <h2>{user.name}</h2>
@@ -138,9 +140,9 @@ const ProfilePage = () => {
                   placeholder="Например: Москва"
                 />
               </div>
-              <button type="submit" disabled={loading} className={styles.submitBtn}>
-                {loading ? 'Создание...' : 'Создать объявление'}
-              </button>
+              <ButtonLoader type="submit" loading={loading} className={styles.submitBtn}>
+                Создать объявление
+              </ButtonLoader>
             </form>
           )}
 

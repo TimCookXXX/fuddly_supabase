@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '@/app/store/hooks';
 import { register } from '@/app/store/slices/authSlice';
+import ButtonLoader from '@/shared/components/ButtonLoader';
 import styles from './AuthPage.module.scss';
 
 const RegisterPage = () => {
@@ -92,9 +93,9 @@ const RegisterPage = () => {
             />
           </div>
 
-          <button type="submit" disabled={loading}>
-            {loading ? 'Загрузка...' : 'Зарегистрироваться'}
-          </button>
+          <ButtonLoader type="submit" loading={loading}>
+            Зарегистрироваться
+          </ButtonLoader>
         </form>
 
         <p className={styles.link}>

@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '@/app/store/hooks';
 import { fetchProducts } from '@/app/store/slices/productsSlice';
 import { Link } from 'react-router-dom';
+import Loader from '@/shared/components/Loader';
 import styles from './CatalogPage.module.scss';
 
 const CatalogPage = () => {
@@ -19,7 +20,13 @@ const CatalogPage = () => {
   };
 
   if (loading) {
-    return <div className="container">Загрузка...</div>;
+    return (
+      <div className={styles.catalogPage}>
+        <div className="container">
+          <Loader text="Загрузка товаров..." />
+        </div>
+      </div>
+    );
   }
 
   return (

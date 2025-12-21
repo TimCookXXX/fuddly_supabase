@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '@/app/store/hooks';
 import { login } from '@/app/store/slices/authSlice';
+import ButtonLoader from '@/shared/components/ButtonLoader';
 import styles from './AuthPage.module.scss';
 
 const LoginPage = () => {
@@ -54,9 +55,9 @@ const LoginPage = () => {
             />
           </div>
 
-          <button type="submit" disabled={loading}>
-            {loading ? 'Загрузка...' : 'Войти'}
-          </button>
+          <ButtonLoader type="submit" loading={loading}>
+            Войти
+          </ButtonLoader>
         </form>
 
         <p className={styles.link}>

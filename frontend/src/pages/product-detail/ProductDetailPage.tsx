@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '@/app/store/hooks';
 import { fetchProduct } from '@/app/store/slices/productsSlice';
+import Loader from '@/shared/components/Loader';
 import styles from './ProductDetailPage.module.scss';
 
 const ProductDetailPage = () => {
@@ -16,11 +17,23 @@ const ProductDetailPage = () => {
   }, [id, dispatch]);
 
   if (loading) {
-    return <div className="container">Загрузка...</div>;
+    return (
+      <div className={styles.productDetailPage}>
+        <div className="container">
+          <Loader text="Загрузка товара..." />
+        </div>
+      </div>
+    );
   }
 
   if (!currentProduct) {
-    return <div className="container">Товар не найден</div>;
+    return (
+      <div className={styles.productDetailPage}>
+        <div className="container">
+          <p style={{ textAlign: 'center', padding: '2rem' }}>Товар не найден</p>
+        </div>
+      </div>
+    );
   }
 
   return (
