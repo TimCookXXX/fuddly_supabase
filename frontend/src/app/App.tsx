@@ -31,8 +31,8 @@ function App() {
       <Header />
       <main style={{ flex: 1 }}>
         <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/catalog" element={<CatalogPage />} />
+          <Route path="/" element={<CatalogPage />} />
+          <Route path="/info" element={<HomePage />} />
           <Route path="/products/:id" element={<ProductDetailPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />

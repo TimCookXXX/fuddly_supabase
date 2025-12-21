@@ -124,6 +124,9 @@ CREATE POLICY "Users can view all active users" ON users
 CREATE POLICY "Users can update their own profile" ON users
   FOR UPDATE USING (auth.uid() = id);
 
+CREATE POLICY "Allow user registration" ON users
+  FOR INSERT WITH CHECK (auth.uid() = id);
+
 -- Products policies
 CREATE POLICY "Anyone can view approved products" ON products
   FOR SELECT USING (status = 'APPROVED' OR seller_id = auth.uid());

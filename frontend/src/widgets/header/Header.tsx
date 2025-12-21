@@ -15,12 +15,12 @@ const Header = () => {
     <header className={styles.header}>
       <div className="container">
         <div className={styles.content}>
-          <Link to="/" className={styles.logo}>
+          <Link to="/info" className={styles.logo}>
             Fuddly
           </Link>
 
           <nav className={styles.nav}>
-            <Link to="/catalog">Каталог</Link>
+            <Link to="/">Каталог</Link>
             {isAuthenticated && (
               <>
                 <Link to="/profile">Профиль</Link>
