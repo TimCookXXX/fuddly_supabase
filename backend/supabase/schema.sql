@@ -149,6 +149,11 @@ CREATE POLICY "Users can view their own leads" ON leads
 CREATE POLICY "Users can create leads" ON leads
   FOR INSERT WITH CHECK (auth.uid() = buyer_id);
 
+CREATE POLICY "Product sellers can update leads" ON leads
+  FOR UPDATE USING (product_id IN (
+    SELECT id FROM products WHERE seller_id = auth.uid()
+  ));
+
 -- Messages policies
 CREATE POLICY "Users can view their own messages" ON messages
   FOR SELECT USING (sender_id = auth.uid() OR receiver_id = auth.uid());
