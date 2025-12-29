@@ -2,8 +2,10 @@ import { useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '@/app/store/hooks';
 import { fetchMyProducts } from '@/app/store/slices/productsSlice';
 import { productsApi } from '@/shared/api/products';
+import type { UploadResult } from '@/shared/api/storage';
 import Loader from '@/shared/components/Loader';
 import ButtonLoader from '@/shared/components/ButtonLoader';
+import ImageUploader from '@/shared/components/ImageUploader';
 import styles from './ProfilePage.module.scss';
 
 const ProfilePage = () => {
@@ -12,6 +14,8 @@ const ProfilePage = () => {
   const { myProducts } = useAppSelector((state) => state.products);
   const [showForm, setShowForm] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [uploadError, setUploadError] = useState<string | null>(null);
+  const [uploadedImages, setUploadedImages] = useState<UploadResult[]>([]);
   const [formData, setFormData] = useState({
     title: '',
     description: '',
@@ -24,6 +28,15 @@ const ProfilePage = () => {
     dispatch(fetchMyProducts());
   }, [dispatch]);
 
+  const handleUploadComplete = (results: UploadResult[]) => {
+    setUploadedImages((prev) => [...prev, ...results]);
+    setUploadError(null);
+  };
+
+  const handleUploadError = (error: string) => {
+    setUploadError(error);
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
@@ -31,10 +44,13 @@ const ProfilePage = () => {
       await productsApi.createProduct({
         ...formData,
         price: Number(formData.price),
+        images: uploadedImages.map((img) => img.url),
       });
       alert('Товар создан и отправлен на модерацию!');
       setShowForm(false);
       setFormData({ title: '', description: '', price: '', category: '', region: '' });
+      setUploadedImages([]);
+      setUploadError(null);
       dispatch(fetchMyProducts());
     } catch (error: any) {
       alert('Ошибка: ' + error.message);
@@ -140,6 +156,20 @@ const ProfilePage = () => {
                   placeholder="Например: Москва"
                 />
               </div>
+
+              <div className={styles.formGroup}>
+                <label>Изображения товара</label>
+                <ImageUploader
+                  folder="products"
+                  maxFiles={5}
+                  onUploadComplete={handleUploadComplete}
+                  onUploadError={handleUploadError}
+                  multiple={true}
+                  existingImages={uploadedImages}
+                />
+                {uploadError && <p className={styles.errorText}>{uploadError}</p>}
+              </div>
+
               <ButtonLoader type="submit" loading={loading} className={styles.submitBtn}>
                 Создать объявление
               </ButtonLoader>

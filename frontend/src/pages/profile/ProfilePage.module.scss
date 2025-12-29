@@ -161,3 +161,9 @@
   font-size: $font-size-sm;
   color: var(--color-text-secondary);
 }
+
+.errorText {
+  margin-top: $spacing-sm;
+  font-size: $font-size-sm;
+  color: $danger-color;
+}

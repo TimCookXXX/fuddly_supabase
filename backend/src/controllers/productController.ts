@@ -2,6 +2,8 @@ import { Response } from 'express';
 import { z } from 'zod';
 import { supabase } from '../supabase';
 import { AuthRequest } from '../middleware/auth';
+import multer from 'multer';
+import crypto from 'crypto';
 
 // Валидация схем
 const createProductSchema = z.object({
@@ -14,6 +16,30 @@ const createProductSchema = z.object({
 });
 
 const updateProductSchema = createProductSchema.partial();
+
+// ═══════════════════════════════════════════════════════════════════════════
+// MULTER CONFIGURATION ДЛЯ ЗАГРУЗКИ ФАЙЛОВ
+// ═══════════════════════════════════════════════════════════════════════════
+
+const storage = multer.memoryStorage();
+
+const fileFilter = (req: any, file: Express.Multer.File, cb: multer.FileFilterCallback) => {
+  const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
+
+  if (allowedTypes.includes(file.mimetype)) {
+    cb(null, true);
+  } else {
+    cb(new Error('Допустимые форматы: JPG, PNG, WebP'));
+  }
+};
+
+export const upload = multer({
+  storage,
+  fileFilter,
+  limits: {
+    fileSize: 5 * 1024 * 1024, // 5MB
+  },
+});
 
 // Получить все одобренные товары (публичный доступ)
 export const getProducts = async (req: AuthRequest, res: Response): Promise<void> => {
@@ -234,6 +260,128 @@ export const getMyProducts = async (req: AuthRequest, res: Response): Promise<vo
     res.json(products || []);
   } catch (error) {
     console.error('Get my products error:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
+// ═══════════════════════════════════════════════════════════════════════════
+// ЗАГРУЗКА ИЗОБРАЖЕНИЙ В SUPABASE STORAGE
+// ═══════════════════════════════════════════════════════════════════════════
+
+const BUCKET_NAME = 'product-images';
+
+/**
+ * Генерирует уникальное имя файла
+ */
+function generateUniqueFileName(originalName: string): string {
+  const timestamp = Date.now();
+  const randomStr = crypto.randomBytes(8).toString('hex');
+  const ext = originalName.split('.').pop();
+  return `${timestamp}-${randomStr}.${ext}`;
+}
+
+/**
+ * Загрузить одно изображение
+ */
+export const uploadImage = async (req: AuthRequest, res: Response): Promise<void> => {
+  try {
+    if (!req.file) {
+      res.status(400).json({ error: 'No file uploaded' });
+      return;
+    }
+
+    const folder = req.body.folder || 'products';
+    const fileName = generateUniqueFileName(req.file.originalname);
+    const filePath = `${folder}/${fileName}`;
+
+    // Загружаем файл в Supabase Storage
+    const { data, error } = await supabase.storage
+      .from(BUCKET_NAME)
+      .upload(filePath, req.file.buffer, {
+        contentType: req.file.mimetype,
+        cacheControl: '3600',
+        upsert: false,
+      });
+
+    if (error) {
+      console.error('Upload image error:', error);
+      res.status(500).json({ error: error.message });
+      return;
+    }
+
+    // Получаем публичный URL
+    const { data: publicUrlData } = supabase.storage
+      .from(BUCKET_NAME)
+      .getPublicUrl(data.path);
+
+    res.status(200).json({
+      url: publicUrlData.publicUrl,
+      path: data.path,
+      size: req.file.size,
+      fileName: req.file.originalname,
+    });
+  } catch (error) {
+    console.error('Upload image error:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
+/**
+ * Удалить изображение
+ */
+export const deleteImage = async (req: AuthRequest, res: Response): Promise<void> => {
+  try {
+    const { path } = req.params;
+
+    if (!path) {
+      res.status(400).json({ error: 'Image path is required' });
+      return;
+    }
+
+    const decodedPath = decodeURIComponent(path);
+
+    const { error } = await supabase.storage
+      .from(BUCKET_NAME)
+      .remove([decodedPath]);
+
+    if (error) {
+      console.error('Delete image error:', error);
+      res.status(500).json({ error: error.message });
+      return;
+    }
+
+    res.status(200).json({ message: 'Image deleted successfully' });
+  } catch (error) {
+    console.error('Delete image error:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
+/**
+ * Удалить несколько изображений
+ */
+export const deleteImages = async (req: AuthRequest, res: Response): Promise<void> => {
+  try {
+    const { paths } = req.body;
+
+    if (!paths || !Array.isArray(paths)) {
+      res.status(400).json({ error: 'Paths array is required' });
+      return;
+    }
+
+    const { error } = await supabase.storage
+      .from(BUCKET_NAME)
+      .remove(paths);
+
+    if (error) {
+      console.error('Delete images error:', error);
+      res.status(500).json({ error: error.message });
+      return;
+    }
+
+    res.status(200).json({ message: 'Images deleted successfully' });
+  } catch (error) {
+    console.error('Delete images error:', error);
     res.status(500).json({ error: 'Internal server error' });
   }
 };

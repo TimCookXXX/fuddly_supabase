@@ -170,3 +170,41 @@ CREATE POLICY "Users can create reports" ON reports
 
 CREATE POLICY "Users can view their own reports" ON reports
   FOR SELECT USING (reporter_id = auth.uid());
+
+-- ═══════════════════════════════════════════════════════════════════════════
+-- STORAGE POLICIES (для загрузки изображений)
+-- ═══════════════════════════════════════════════════════════════════════════
+
+-- Создание bucket для изображений продуктов
+-- ВАЖНО: Это нужно выполнить через Supabase Dashboard или через их API
+-- так как CREATE BUCKET не является стандартной SQL командой
+--
+-- Настройки bucket:
+-- - Name: product-images
+-- - Public: true
+-- - File size limit: 5MB
+-- - Allowed MIME types: image/jpeg, image/png, image/webp
+
+-- Политика для загрузки изображений
+-- Разрешает авторизованным пользователям загружать файлы в папку products
+CREATE POLICY "Authenticated users can upload images"
+ON storage.objects FOR INSERT
+TO authenticated
+WITH CHECK (
+  bucket_id = 'product-images' AND
+  (storage.foldername(name))[1] = 'products'
+);
+
+-- Политика для чтения изображений
+-- Разрешает всем читать изображения (публичный bucket)
+CREATE POLICY "Public read access"
+ON storage.objects FOR SELECT
+TO public
+USING (bucket_id = 'product-images');
+
+-- Политика для удаления изображений
+-- Разрешает авторизованным пользователям удалять файлы
+CREATE POLICY "Users can delete their own images"
+ON storage.objects FOR DELETE
+TO authenticated
+USING (bucket_id = 'product-images');
