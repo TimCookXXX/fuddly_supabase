@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  # Frontend сервис (первый сервис - для него будет проксирование)
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    environment:
+      - NODE_ENV=production
+      - VITE_API_URL=http://backend:3003
+    networks:
+      - fuddly-network
+
+  # Backend сервис
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    restart: unless-stopped
+    ports:
+      - "3003:3003"
+    environment:
+      - NODE_ENV=production
+      - PORT=3003
+      - SUPABASE_URL=${SUPABASE_URL}
+      - SUPABASE_ANON_KEY=${SUPABASE_ANON_KEY}
+      - SUPABASE_SERVICE_KEY=${SUPABASE_SERVICE_KEY}
+    networks:
+      - fuddly-network
+
+networks:
+  fuddly-network:
+    driver: bridge

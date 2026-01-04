@@ -1,0 +1,33 @@
+# Frontend Dockerfile - используем serve для раздачи статики
+FROM node:18-alpine AS builder
+
+WORKDIR /app
+
+# Копируем package файлы frontend
+COPY frontend/package*.json ./
+
+# Устанавливаем зависимости
+RUN npm ci
+
+# Копируем исходный код frontend
+COPY frontend/ ./
+
+# Собираем приложение для production
+RUN npm run build
+
+# Production образ
+FROM node:18-alpine
+
+WORKDIR /app
+
+# Устанавливаем serve для раздачи статики
+RUN npm install -g serve
+
+# Копируем собранное приложение
+COPY --from=builder /app/dist ./dist
+
+# Открываем порт
+EXPOSE 8080
+
+# Запускаем serve на порту 8080
+CMD ["serve", "-s", "dist", "-l", "8080"]

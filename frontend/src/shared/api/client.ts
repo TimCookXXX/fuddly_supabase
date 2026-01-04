@@ -22,7 +22,12 @@ class ApiClient {
   }
 
   private buildUrl(endpoint: string, params?: Record<string, any>): string {
-    const url = new URL(`${this.baseUrl}${endpoint}`, window.location.origin);
+    // Если baseUrl уже полный URL (начинается с http), используем его напрямую
+    const fullUrl = this.baseUrl.startsWith('http')
+      ? `${this.baseUrl}${endpoint}`
+      : `${window.location.origin}${this.baseUrl}${endpoint}`;
+
+    const url = new URL(fullUrl);
 
     if (params) {
       Object.entries(params).forEach(([key, value]) => {
