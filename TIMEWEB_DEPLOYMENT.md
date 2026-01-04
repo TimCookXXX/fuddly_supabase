@@ -90,16 +90,16 @@ git push origin main
 Добавьте следующие переменные окружения в настройках приложения:
 
 ```env
-# Supabase Configuration
+# Supabase Configuration (обязательно)
 SUPABASE_URL=https://your-project.supabase.co
 SUPABASE_ANON_KEY=your-anon-key-here
 SUPABASE_SERVICE_KEY=your-service-role-key-here
-
-# Node Environment
-NODE_ENV=production
 ```
 
-⚠️ **ВАЖНО**: Замените значения на ваши реальные ключи из Supabase!
+⚠️ **ВАЖНО**:
+- Замените значения на ваши реальные ключи из Supabase!
+- Эти переменные нужны только для backend
+- Frontend использует относительные пути `/api` и не требует дополнительных переменных
 
 #### Шаг 5: Запуск
 1. Нажмите **"Создать и запустить"**
@@ -123,8 +123,9 @@ NODE_ENV=production
 
 ## Структура сервисов
 
-### Frontend (serve)
-- Раздает собранную статику из `dist/`
+### Frontend (nginx)
+- Раздает собранную статику из `/usr/share/nginx/html`
+- Проксирует `/api` запросы к backend
 - Порт: 8080
 - Получает проксирование от Timeweb Cloud (как первый сервис)
 
@@ -136,9 +137,10 @@ NODE_ENV=production
 
 ## API запросы
 
-Frontend делает запросы к Backend через внутреннюю Docker сеть:
-- В docker-compose: `http://backend:3003`
-- Снаружи через Timeweb: автоматическое проксирование
+Frontend делает запросы к Backend:
+- **Внутри Docker**: Nginx проксирует `/api` → `http://backend:3003/api`
+- **Снаружи**: Пользователь → Timeweb (проксирование) → Frontend nginx → Backend
+- **Не требуется** настройка CORS благодаря nginx проксированию
 
 ## Логи и мониторинг
 
